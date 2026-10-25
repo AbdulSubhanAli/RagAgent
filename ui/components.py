@@ -175,21 +175,20 @@ def render_no_sources():
     """, unsafe_allow_html=True)
 
 def render_3d_source_stack(sources: list):
-    """Renders 3D Source Stack iframe with perfect hover responsiveness on all cards."""
+    """Renders 3D Source Stack iframe with generous padding and margins to eliminate hover clipping."""
     n = len(sources)
     if n == 0:
         render_no_sources()
         return
 
     component_height = 80 + n * 155
-    # All Z offsets are positive to ensure every card sits in front of the base plane
     z_offsets = [30, 20, 10, 5, 0, 0]
     
     cards_html = []
     for i, src in enumerate(sources):
         z = z_offsets[i % len(z_offsets)]
         top = 25 + i * 150
-        z_index = 50 - i  # Stacking order ensures clean hitboxes for hover
+        z_index = 50 - i
         
         delay_float = f"-{0.5 + i * 0.8:.1f}s"
         delay_entry = f"{i * 0.12:.2f}s"
@@ -206,7 +205,7 @@ def render_3d_source_stack(sources: list):
         card_code = f"""
         <div class="source-card" style="
           top: {top}px;
-          left: 5px;
+          left: 18px;
           --z: {z}px;
           z-index: {z_index};
           animation-delay: {delay_float}, {delay_entry};
@@ -232,7 +231,7 @@ def render_3d_source_stack(sources: list):
       @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
       * {{ box-sizing: border-box; }}
       body {{
-        margin: 0; padding: 25px 10px 10px 10px;
+        margin: 0; padding: 25px 20px 20px 20px;
         background: transparent;
         font-family: 'Sora', sans-serif;
         color: #EDEBFF;
@@ -247,8 +246,8 @@ def render_3d_source_stack(sources: list):
       }}
       .source-card {{
         position: absolute;
-        width: calc(100% - 15px);
-        max-width: 320px;
+        width: calc(100% - 36px);
+        max-width: 310px;
         padding: 14px 16px;
         background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
         border: 1px solid rgba(255,255,255,.22);
@@ -263,7 +262,7 @@ def render_3d_source_stack(sources: list):
         cursor: pointer;
       }}
       .source-card:hover {{
-        transform: translateZ(60px) scale(1.02) rotateY(0deg) rotateX(0deg) !important;
+        transform: translateZ(50px) scale(1.02) rotateY(0deg) rotateX(0deg) !important;
         border-color: rgba(45,226,200,0.85) !important;
         box-shadow: 0 25px 50px rgba(0,0,0,.7), 0 0 35px rgba(45,226,200,.5) !important;
         z-index: 99999 !important;
