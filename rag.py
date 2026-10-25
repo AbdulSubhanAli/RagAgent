@@ -59,17 +59,10 @@ with st.sidebar:
     if api_key:
         st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
         if st.button("🚪 Logout", key="logout_btn", use_container_width=True):
-            # 1. Purge environment memory
             os.environ.pop("OPENAI_API_KEY", None)
-            
-            # 2. Increment session version ID
             new_login_id = st.session_state.login_id + 1
-            
-            # 3. Clear all cached session state and assign new version
             st.session_state.clear()
             st.session_state.login_id = new_login_id
-            
-            # 4. Rerun app
             st.rerun()
 
 # Halt execution if no API key is provided
@@ -236,8 +229,6 @@ if "vectorstore" in st.session_state:
                         "score": doc.metadata.get("score", None)
                     })
                 
-                st.session_state.latest_retrieved_docs = sources_list
-                
                 answer_chunks = []
                 answer_placeholder = st.empty()
                 
@@ -245,14 +236,23 @@ if "vectorstore" in st.session_state:
                     answer_chunks.append(chunk)
                     current_text = "".join(answer_chunks)
                     thinking_placeholder.empty()
+                    
+                    # Suppress citation pills if answer indicates not found
+                    is_not_found = "couldn't find" in current_text.lower() or "could not find" in current_text.lower()
+                    active_sources = [] if is_not_found else sources_list
+                    
                     with answer_placeholder.container():
-                        render_assistant_message(current_text, sources_list)
+                        render_assistant_message(current_text, active_sources)
                 
                 full_answer = "".join(answer_chunks)
+                is_not_found = "couldn't find" in full_answer.lower() or "could not find" in full_answer.lower()
+                final_sources = [] if is_not_found else sources_list
+
+                st.session_state.latest_retrieved_docs = final_sources
                 st.session_state.messages.append({
                     "role": "assistant",
                     "content": full_answer,
-                    "sources": sources_list
+                    "sources": final_sources
                 })
                 st.rerun()
 
