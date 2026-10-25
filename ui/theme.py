@@ -3,7 +3,8 @@ import streamlit as st
 def apply_aurora_theme():
     """
     Injects global CSS variables, Google Sora font, background aurora orbs,
-    file uploader glass styling, fixed bottom prompt bar, and crisp input contrast.
+    file uploader glass styling, fixed bottom prompt bar, high-contrast inputs,
+    and crystal-clear slider values & limit ticks.
     """
     st.markdown("""
     <style>
@@ -39,10 +40,50 @@ def apply_aurora_theme():
       padding-bottom: 120px !important;
     }
 
-    /* Hide default Streamlit header bar, footer, and deploy button */
-    header[data-testid="stHeader"], footer, #MainMenu, .stDeployButton, [data-testid="stDecoration"] {
+    /* HEADER & SIDEBAR TOGGLE FIX */
+    header[data-testid="stHeader"] {
+      background: transparent !important;
+      z-index: 999 !important;
+    }
+
+    /* Hide unwanted default elements (footer, deploy button, main menu) */
+    footer, #MainMenu, .stDeployButton, [data-testid="stDecoration"] {
       display: none !important;
       visibility: hidden !important;
+    }
+
+    /* STYLED SIDEBAR EXPAND / COLLAPSE BUTTONS (<< AND >>) */
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"],
+    button[aria-label="Expand sidebar"],
+    button[aria-label="Collapse sidebar"] {
+      display: flex !important;
+      visibility: visible !important;
+      color: #5CF0DA !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.25) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border-radius: 12px !important;
+      z-index: 100000 !important;
+      transition: all 0.2s ease !important;
+    }
+
+    [data-testid="stSidebarCollapsedControl"]:hover,
+    [data-testid="collapsedControl"]:hover,
+    button[aria-label="Expand sidebar"]:hover,
+    button[aria-label="Collapse sidebar"]:hover {
+      background: rgba(45, 226, 200, 0.25) !important;
+      border-color: #2DE2C8 !important;
+      box-shadow: 0 0 15px rgba(45, 226, 200, 0.5) !important;
+    }
+
+    [data-testid="stSidebarCollapsedControl"] svg,
+    [data-testid="collapsedControl"] svg,
+    button[aria-label="Expand sidebar"] svg,
+    button[aria-label="Collapse sidebar"] svg {
+      fill: #5CF0DA !important;
+      color: #5CF0DA !important;
     }
 
     /* ANIMATED AURORA BACKGROUND ORBS */
@@ -157,15 +198,41 @@ def apply_aurora_theme():
       box-shadow: 0 0 0 2px var(--teal) !important;
     }
 
-    [data-testid="stSlider"] div[role="slider"] {
-      background: linear-gradient(135deg, var(--teal), var(--violet)) !important;
-      box-shadow: 0 0 14px rgba(45,226,200,.6) !important;
+    /* SLIDER VISIBILITY & HIGH-CONTRAST LABELS FIX */
+    [data-testid="stSlider"] label,
+    [data-testid="stSlider"] [data-testid="stMarkdownContainer"] p {
+      color: #EDEBFF !important;
+      -webkit-text-fill-color: #EDEBFF !important;
+      font-weight: 600 !important;
     }
 
-    [data-testid="stSlider"] [data-testid="stTickBarValue"],
-    [data-testid="stSlider"] [data-baseweb="tooltip"] {
-      color: var(--teal-text) !important;
+    /* Active selected value floating above knob (1000, 150, 4) */
+    [data-testid="stSlider"] div[data-testid="stSliderThumbValue"],
+    [data-testid="stSlider"] [data-baseweb="tooltip"],
+    [data-testid="stSlider"] div[class*="StyledThumbValue"] {
+      color: #5CF0DA !important;
+      -webkit-text-fill-color: #5CF0DA !important;
       font-weight: 700 !important;
+      font-size: 14px !important;
+    }
+
+    /* Slider Min & Max Limit Numbers (500, 2000, 0, 400, etc.) */
+    [data-testid="stSlider"] [data-testid="stTickBarValue"],
+    [data-testid="stSlider"] div[data-testid="stSliderTickBar"] span,
+    [data-testid="stSlider"] div[data-testid="stSliderTickBar"] div,
+    [data-testid="stSlider"] div[class*="st-"] p,
+    [data-testid="stSlider"] span {
+      color: #B7B2E6 !important;
+      -webkit-text-fill-color: #B7B2E6 !important;
+      font-weight: 600 !important;
+      opacity: 1 !important;
+    }
+
+    /* Slider Knob Thumb Button */
+    [data-testid="stSlider"] div[role="slider"] {
+      background: linear-gradient(135deg, #2DE2C8, #7C5CFF) !important;
+      box-shadow: 0 0 16px rgba(45,226,200,.8) !important;
+      border: 2px solid #FFFFFF !important;
     }
 
     /* UPLOAD DOCUMENT GLASS CONTAINER */
